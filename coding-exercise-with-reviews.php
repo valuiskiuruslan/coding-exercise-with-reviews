@@ -72,3 +72,91 @@ function cewr_plugin_url($path = '')
 
     return $url;
 }
+
+// Register Custom Post Type
+add_action('init', 'cewr_review_type', 0);
+function cewr_review_type()
+{
+    $labels = array(
+        'name' => _x('Reviews', 'Post Type General Name', 'coding-exercise-with-reviews'),
+        'singular_name' => _x('Review', 'Post Type Singular Name', 'coding-exercise-with-reviews'),
+        'menu_name' => __('Reviews', 'coding-exercise-with-reviews'),
+        'name_admin_bar' => __('Review', 'coding-exercise-with-reviews'),
+        'archives' => __('Review Archives', 'coding-exercise-with-reviews'),
+        'attributes' => __('Review Attributes', 'coding-exercise-with-reviews'),
+        'parent_item_colon' => __('Parent Item:', 'coding-exercise-with-reviews'),
+        'all_items' => __('All Items', 'coding-exercise-with-reviews'),
+        'add_new_item' => __('Add New Item', 'coding-exercise-with-reviews'),
+        'add_new' => __('Add New', 'coding-exercise-with-reviews'),
+        'new_item' => __('New Item', 'coding-exercise-with-reviews'),
+        'edit_item' => __('Edit Item', 'coding-exercise-with-reviews'),
+        'update_item' => __('Update Item', 'coding-exercise-with-reviews'),
+        'view_item' => __('View Item', 'coding-exercise-with-reviews'),
+        'view_items' => __('View Items', 'coding-exercise-with-reviews'),
+        'search_items' => __('Search Item', 'coding-exercise-with-reviews'),
+        'not_found' => __('Not found', 'coding-exercise-with-reviews'),
+        'not_found_in_trash' => __('Not found in Trash', 'coding-exercise-with-reviews'),
+        'featured_image' => __('Featured Image', 'coding-exercise-with-reviews'),
+        'set_featured_image' => __('Set featured image', 'coding-exercise-with-reviews'),
+        'remove_featured_image' => __('Remove featured image', 'coding-exercise-with-reviews'),
+        'use_featured_image' => __('Use as featured image', 'coding-exercise-with-reviews'),
+        'insert_into_item' => __('Insert into item', 'coding-exercise-with-reviews'),
+        'uploaded_to_this_item' => __('Uploaded to this item', 'coding-exercise-with-reviews'),
+        'items_list' => __('Items list', 'coding-exercise-with-reviews'),
+        'items_list_navigation' => __('Items list navigation', 'coding-exercise-with-reviews'),
+        'filter_items_list' => __('Filter items list', 'coding-exercise-with-reviews'),
+    );
+
+    $args = array(
+        'label' => __('Review', 'coding-exercise-with-reviews'),
+        'description' => __('Reviews of casino', 'coding-exercise-with-reviews'),
+        'labels' => $labels,
+        'supports' => array('title', 'thumbnail', 'custom-fields', 'page-attributes'),
+        'hierarchical' => false,
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'menu_position' => 5,
+        'show_in_admin_bar' => true,
+        'show_in_nav_menus' => true,
+        'can_export' => true,
+        'has_archive' => true,
+        'exclude_from_search' => false,
+        'publicly_queryable' => true,
+        'capability_type' => 'page',
+    );
+
+    register_post_type('review', $args);
+}
+
+add_action('manage_review_posts_columns', 'cewr_manage_review_posts_columns', 10, 1);
+function cewr_manage_review_posts_columns($posts_columns)
+{
+    $custom_posts_columns = [
+        'cb' => $posts_columns['cb'],
+        'cewr_review_thumbs' => __('Featured Image', 'coding-exercise-with-reviews'),
+        'title' => $posts_columns['title'],
+        'cewr_review_rating' => __('Rating', 'coding-exercise-with-reviews'),
+        'cewr_review_bonus' => __('Bonus', 'coding-exercise-with-reviews'),
+        'date' => $posts_columns['date'],
+    ];
+
+    return $custom_posts_columns;
+}
+
+add_action('manage_review_posts_custom_column', 'cewr_manage_review_posts_custom_column', 10, 2);
+function cewr_manage_review_posts_custom_column($column_name, $id)
+{
+    if ('cewr_review_thumbs' === $column_name) { ?>
+        <a href="<?= get_edit_post_link($id) ?>">
+            <?php the_post_thumbnail(array(100, 100)); // size of the thumbnail ?>
+        </a>
+        <?php
+    }
+    else if ('cewr_review_rating' === $column_name) {
+        echo get_post_meta($id, 'Rating', true);
+    }
+    else if ('cewr_review_bonus' === $column_name) {
+        echo get_post_meta($id, 'Bonus', true);
+    }
+}

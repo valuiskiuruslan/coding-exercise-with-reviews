@@ -10,3 +10,9 @@ Text Domain: coding-exercise-with-reviews
 
 * @package CodingExerciseWithReviews
 */
+
+defined( 'ABSPATH' ) || exit;
+
+define('CEWR_VERSION', '1.1');
+define('CEWR_PLUGIN', __FILE__);
+define('CEWR_PLUGIN_DIR', untrailingslashit(dirname(__FILE__)));

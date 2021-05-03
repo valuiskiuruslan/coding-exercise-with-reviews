@@ -66,3 +66,11 @@ function cewr_review_type()
 {
     Review::register_post_type();
 }
+
+add_image_size('cewr_review_logo', 195, 75);
+
+add_filter('wp_get_attachment_image_attributes', 'cewr_get_attachment_image_attributes', 11, 3);
+function cewr_get_attachment_image_attributes( $attr, $attachment, $size ) {
+    unset($attr['style']);
+    return $attr;
+}

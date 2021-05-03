@@ -15,7 +15,7 @@ use CodingExerciseWithReviews\classes\Template;
 
 defined('ABSPATH') || exit;
 
-define('CEWR_VERSION', '1.1');
+define('CEWR_VERSION', '1.0.0');
 define('CEWR_PLUGIN', __FILE__);
 define('CEWR_PLUGIN_DIR', untrailingslashit(dirname(__FILE__)));
 define('CEWR_REVIEWS_PAGE_TEMPLATE', 'reviews.php');
@@ -25,6 +25,9 @@ require_once CEWR_PLUGIN_DIR . '/classes/Template.php';
 require_once CEWR_PLUGIN_DIR . '/classes/Review.php';
 require_once CEWR_PLUGIN_DIR . '/admin/edit.php';
 require_once CEWR_PLUGIN_DIR . '/admin/settings.php';
+require_once CEWR_PLUGIN_DIR . '/classes/IDataParser.php';
+require_once CEWR_PLUGIN_DIR . '/classes/DemoDataParser.php';
+require_once CEWR_PLUGIN_DIR . '/classes/Endpoint.php';
 
 // Load template from specific page
 add_filter('page_template', 'cewr_page_template');

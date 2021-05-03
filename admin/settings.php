@@ -1,6 +1,8 @@
 <?php
 
+use CodingExerciseWithReviews\classes\DemoDataParser;
 use CodingExerciseWithReviews\classes\Review;
+use CodingExerciseWithReviews\classes\ReviewEndpoint;
 
 add_action('admin_menu', function() {
     add_menu_page('Reviews API', 'Reviews API', 'manage_options', 'reviews-api', 'reviewsAPIMenuPage');
@@ -47,7 +49,6 @@ function reviewsAPIMenuPage() {
                         self.disabled = false;
                     }
                 }).done(function (result) {
-                    // todo remove
                     console.log(result);
                 });
             });
@@ -61,37 +62,40 @@ function cewr_refresh_reviews()
 {
     $response = array();
 
-    $data = file_get_contents(CEWR_PLUGIN_DIR . '/data.json');
-    $data = json_decode($data, true);
-    $reviews = $data['toplists']['575']; // todo replace with constants
+    $reviewEndpoint = new ReviewEndpoint(new DemoDataParser(), CEWR_PLUGIN_DIR . '/data.json');
+    $reviews = $reviewEndpoint->parseReviewResponse();
 
-    foreach ($reviews as $review) {
-        $reviewObj = Review::find_by_brand_id($review['brand_id']);
-        $reviewObj->set_brand_id($review['brand_id']);
-        $reviewObj->set_position($review['position']);
-        $reviewObj->set_properties([
-            Review::META_RATING => $review['info']['rating'],
-            Review::META_BONUS => $review['info']['bonus'],
-            Review::META_FEATURES => implode(PHP_EOL, $review['info']['features']),
-            Review::META_PLAY_URL => $review['play_url'],
-            Review::META_TERMS_AND_CONDITIONS => $review['terms_and_conditions'],
-        ]);
+    if (!empty($reviews)) {
+        foreach ($reviews as $review) {
+            $reviewObj = Review::find_by_brand_id($review['brand_id']);
+            $reviewObj->set_brand_id($review['brand_id']);
+            $reviewObj->set_position($review['position']);
+            $reviewObj->set_properties([
+                Review::META_RATING => $review['info']['rating'],
+                Review::META_BONUS => $review['info']['bonus'],
+                Review::META_FEATURES => implode(PHP_EOL, $review['info']['features']),
+                Review::META_PLAY_URL => $review['play_url'],
+                Review::META_TERMS_AND_CONDITIONS => $review['terms_and_conditions'],
+            ]);
 
-        $reviewObj->save();
+            $reviewObj->save();
 
-        $image_id = cewr_create_new_image_attachment($review['logo'], $reviewObj->get_id());
-        if ($image_id) {
-            // removing previous image
-            $thumbnail_id = get_post_thumbnail_id($reviewObj->get_id());
-            if ($thumbnail_id) {
-                cewr_delete_attachment_and_file($thumbnail_id);
+            $image_id = cewr_create_new_image_attachment($review['logo'], $reviewObj->get_id());
+            if ($image_id) {
+                // removing previous image
+                $thumbnail_id = get_post_thumbnail_id($reviewObj->get_id());
+                if ($thumbnail_id) {
+                    cewr_delete_attachment_and_file($thumbnail_id);
+                }
+
+                set_post_thumbnail($reviewObj->get_id(), $image_id);
             }
-
-            set_post_thumbnail($reviewObj->get_id(), $image_id);
         }
+        $response['result'] = true;
     }
-
-    $response['result'] = true;
+    else {
+        $response['result'] = false;
+    }
 
     header( "Content-Type: application/json" );
     echo json_encode($response);

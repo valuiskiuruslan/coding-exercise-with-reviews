@@ -78,6 +78,17 @@ function cewr_refresh_reviews()
         ]);
 
         $reviewObj->save();
+
+        $image_id = cewr_create_new_image_attachment($review['logo'], $reviewObj->get_id());
+        if ($image_id) {
+            // removing previous image
+            $thumbnail_id = get_post_thumbnail_id($reviewObj->get_id());
+            if ($thumbnail_id) {
+                cewr_delete_attachment_and_file($thumbnail_id);
+            }
+
+            set_post_thumbnail($reviewObj->get_id(), $image_id);
+        }
     }
 
     $response['result'] = true;

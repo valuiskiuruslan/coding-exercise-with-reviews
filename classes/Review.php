@@ -18,9 +18,9 @@ class Review
 
     private static $found_items = 0;
 
-    private $id;
-    private $brand_id; // post_title
-    private $position; // menu_order
+    private $id = 0;
+    private $brand_id = 0; // post_title
+    private $position = 0; // menu_order
     private $properties = array();
 
     public static function count()
@@ -137,6 +137,11 @@ class Review
         }
     }
 
+    public function get_id()
+    {
+        return $this->id;
+    }
+
     public function get_brand_id()
     {
         return $this->brand_id;
@@ -208,6 +213,8 @@ class Review
                 update_post_meta($post_id, $prop, $value);
             }
         }
+
+        $this->id = $post_id;
 
         return $post_id;
     }

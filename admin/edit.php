@@ -14,7 +14,7 @@ function cewr_manage_review_posts_columns($posts_columns)
     $custom_posts_columns = [
         'cb' => $posts_columns['cb'],
         'cewr_review_thumbs' => __('Featured Image', 'coding-exercise-with-reviews'),
-        'title' => $posts_columns['title'], // todo replace with brand id
+        'title' => __('Brand ID', 'coding-exercise-with-reviews'),
         'cewr_review_rating' => __('Rating', 'coding-exercise-with-reviews'),
         'cewr_review_bonus' => __('Bonus', 'coding-exercise-with-reviews'),
         'date' => $posts_columns['date'],

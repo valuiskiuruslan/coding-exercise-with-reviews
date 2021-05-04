@@ -52,7 +52,7 @@ get_header();
                             <td data-label="<?= __('Casino', 'coding-exercise-with-reviews') ?>">
                                 <div>
                                     <div class="review-logo">
-                                        <?= get_the_post_thumbnail($review->get_id()) ?>
+                                        <?= get_the_post_thumbnail($review->get_id(), 'cewr_review_logo') ?>
                                     </div>
                                     <a href="<?= get_permalink($review->get_id()) ?>">
                                         <?= __('Review', 'coding-exercise-with-reviews') ?>

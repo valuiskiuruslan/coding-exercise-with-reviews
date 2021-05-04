@@ -56,7 +56,8 @@
 }
 .review-logo img {
     width: 195px;
-    height: auto;
+    height: 75px;
+    object-fit: contain;
     text-align: center;
 }
 

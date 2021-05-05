@@ -11,8 +11,7 @@ function cewr_plugin_url($path = '')
 {
     $url = plugins_url($path, CEWR_PLUGIN);
 
-    if (is_ssl()
-        and 'http:' == substr($url, 0, 5)) {
+    if (is_ssl() && 'http:' == substr($url, 0, 5)) {
         $url = 'https:' . substr($url, 5);
     }
 

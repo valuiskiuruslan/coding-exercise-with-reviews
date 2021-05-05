@@ -36,7 +36,7 @@ add_filter('page_template', 'cewr_page_template');
 function cewr_page_template($page_template)
 {
     if (get_page_template_slug() == CEWR_REVIEWS_PAGE_TEMPLATE) {
-        $page_template = Template::get_template('reviews.php', '', '', '', true);
+        $page_template = Template::get_template(CEWR_REVIEWS_PAGE_TEMPLATE, '', '', '', true);
     }
     return $page_template;
 }

@@ -25,7 +25,7 @@ require_once CEWR_PLUGIN_DIR . '/classes/Template.php';
 require_once CEWR_PLUGIN_DIR . '/classes/Review.php';
 require_once CEWR_PLUGIN_DIR . '/classes/IDataParser.php';
 require_once CEWR_PLUGIN_DIR . '/classes/DemoDataParser.php';
-require_once CEWR_PLUGIN_DIR . '/classes/Endpoint.php';
+require_once CEWR_PLUGIN_DIR . '/classes/ReviewEndpoint.php';
 require_once CEWR_PLUGIN_DIR . '/classes/ReviewOrder.php';
 require_once CEWR_PLUGIN_DIR . '/admin/settings.php';
 require_once CEWR_PLUGIN_DIR . '/admin/edit.php';
